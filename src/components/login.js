@@ -2,46 +2,80 @@ import React, { Component } from 'react'
 import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
 import { Button } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-import LoginRadio from './loginRadio'
+import RadioButton from './radioButton'
+import HomeImage from './homeImage'
+import Routes from '../routes'
 
+import api from '../services/api'
 
 const {height, width} = Dimensions.get('window')
 
-_login = () => {}
+const radioOptions = [
+  { key: 1, text: 'CPF' },
+  { key: 2, text: 'CNPJ' },
+]
 
-class HomeImage extends Component {
-  render() {
-    return (
-      <Image source={require('../assets/fmi.png')} style={{ width: 190, height:100 }}/>
-    )
+class Login extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      username: '',
+      password: ''
+    }
   }
-}
 
-export default class Login extends Component {
+  _login = async () => {
+    const response = await api.post('/login', this.state)
+
+    if (response.data !== null) {
+      <Routes />
+      this.props.navigation.navigate('Home')
+    }
+
+    console.log(response.data);
+  }
 
   render() {
     return (
       <View style={styles.container}>
 
-        <View>
-          <HomeImage style={styles.image} />
+        <View style={styles.image}>
+          <HomeImage />
         </View>
 
-        <LoginRadio />
+        <View style={styles.content}>
 
-        <TextInput style={styles.input} placeholder='CPF/CNPJ' placeholderTextColor='#95989c'></TextInput>
+          <RadioButton options={radioOptions}/>
 
-        <TextInput style={styles.input} placeholder='Senha' placeholderTextColor='#95989c'></TextInput>
+          <TextInput
+            style={styles.input}
+            placeholder='CPF/CNPJ'
+            placeholderTextColor='#95989c'
+            onChangeText={(text) => this.setState({username:text})}>
+          </TextInput>
 
-        <TouchableOpacity style={styles.loginContainer}>
-          <Text style={styles.loginBtn}>Entrar</Text>
-        </TouchableOpacity>
+          <TextInput
+            secureTextEntry={true}
+            style={styles.input}
+            placeholder='Senha'
+            placeholderTextColor='#95989c'
+            onChangeText={(text) => this.setState({password:text})}>
+          </TextInput>
+
+          <TouchableOpacity style={styles.loginContainer} onPress={this._login}>
+            <Text style={styles.loginBtn}>Entrar</Text>
+          </TouchableOpacity>
+
+        </View>
 
       </View>
     )
   }
 }
+
+export default Login
 
 const styles = StyleSheet.create({
   container: {
@@ -85,6 +119,9 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   image: {
-    marginBottom: 10
+    flex: 0.2,
+  },
+  content: {
+    flex: 0.4,
   }
 })

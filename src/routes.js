@@ -1,5 +1,4 @@
 import { createAppContainer, createStackNavigator } from 'react-navigation'
-
 import Login from './components/login.js'
 import Home from './components/main.js'
 
@@ -7,8 +6,12 @@ const Routes = createStackNavigator({
   Login: {
     screen: Login,
     navigationOptions: {
-      title: 'Login'
-    },
+      title: 'Login',
+      headerStyle: {
+        backgroundColor: '#374a63'
+      },
+      headerTintColor: '#fff'
+    }
   },
   Home: Home,
 })
