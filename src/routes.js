@@ -13,7 +13,16 @@ const Routes = createStackNavigator({
       headerTintColor: '#fff'
     }
   },
-  Home: Home,
+  Home: {
+    screen: Home,
+    navigationOptions: {
+      title: 'Home',
+      headerStyle: {
+        backgroundColor: '#374a63'
+      },
+      headerTintColor: '#fff'
+    }
+  }
 })
 
 export default createAppContainer(Routes)

@@ -6,7 +6,7 @@ export default class HomeImage extends Component {
     return (
       <Image
         style={{ height: 100, width: 300 }}
-        source={ require('../assets/fmi.png') }
+        source={ require('../../assets/fmi.png') }
       />
     )
   }

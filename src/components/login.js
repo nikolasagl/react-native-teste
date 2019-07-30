@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
 import { Button } from 'react-native-elements'
+import { StackActions, NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import RadioButton from './radioButton'
-import HomeImage from './homeImage'
+import RadioButton from './utils/radioButton'
+import HomeImage from './utils/homeImage'
 import Routes from '../routes'
 
 import api from '../services/api'
@@ -30,8 +31,11 @@ class Login extends Component {
     const response = await api.post('/login', this.state)
 
     if (response.data !== null) {
-      <Routes />
-      this.props.navigation.navigate('Home')
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Home' })],
+      });
+      this.props.navigation.dispatch(resetAction);
     }
 
     console.log(response.data);
@@ -47,12 +51,13 @@ class Login extends Component {
 
         <View style={styles.content}>
 
-          <RadioButton options={radioOptions}/>
+          <RadioButton options={radioOptions} />
 
           <TextInput
             style={styles.input}
-            placeholder='CPF/CNPJ'
+            placeholder='Email'
             placeholderTextColor='#95989c'
+            autoCapitalize = 'none'
             onChangeText={(text) => this.setState({username:text})}>
           </TextInput>
 
@@ -61,6 +66,7 @@ class Login extends Component {
             style={styles.input}
             placeholder='Senha'
             placeholderTextColor='#95989c'
+            autoCapitalize = 'none'
             onChangeText={(text) => this.setState({password:text})}>
           </TextInput>
 
