@@ -2,10 +2,14 @@ import React, { Component } from 'react'
 
 import { View, Text } from 'react-native'
 
-export default class Detalhado extends Component {
+class Detalhado extends Component {
    render() {
       return (
-         <View></View>
+         <View>
+            <Text>Detalhado Screen</Text>
+         </View>
       )
    }
 }
+
+export default Detalhado

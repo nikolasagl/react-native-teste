@@ -31,5 +31,18 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikolasagl/react-native-teste.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikolasagl/react-native-teste/issues"
+  },
+  "homepage": "https://github.com/nikolasagl/react-native-teste#readme",
+  "description": ""
 }

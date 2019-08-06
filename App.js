@@ -8,30 +8,30 @@ import Investimento from './src/components/pages/investimento'
 import Resgate from './src/components/pages/resgate'
 import Detalhado from './src/components/pages/detalhado'
 
-const financeiroTabNavigator = createBottomTabNavigator({
-   Investimento,
-   Resgate,
-   Detalhado
-})
+const financeiroTabNavigator = createBottomTabNavigator(
+   {
+      Investimento,
+      Resgate,
+      Detalhado
+   }
+)
 
-const drawerNavigator = createDrawerNavigator({
-   Resumo: {
-      screen: Resumo,
-      navigationOptions: {
-         title: 'Resumo Financeiro',
-      }
-   },
-   Configuracoes: {
-      screen: Configuracoes,
-      navigationOptions: {
-         headerTitle: 'Configurações',
-      }
-   },
+const drawerNavigator = createDrawerNavigator(
+{
+   Resumo: Resumo,
+   Configuracoes: Configuracoes,
    Financeiro: financeiroTabNavigator
+}, {
+   navigationOptions: ({ navigation }) =>  {
+      const { routeName } = navigation.state.routes[navigation.state.index]
+      return {
+         headerTitle: routeName
+      }
+   }
 })
 
-const stackNavigator = createStackNavigator({
-
+const stackNavigator = createStackNavigator(
+{
    Login: {
       screen: Login,
       navigationOptions: () => ({
