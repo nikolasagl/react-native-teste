@@ -1,3 +1,5 @@
+import React from 'react'
+import { Text } from 'react-native'
 import { createAppContainer, createStackNavigator, createDrawerNavigator, createBottomTabNavigator } from 'react-navigation'
 import './src/config/statusBarConfig'
 import Login from './src/components/pages/login'
@@ -62,6 +64,14 @@ const stackNavigator = createStackNavigator(
          },
          headerTintColor: '#fff'
       }),
+   }
+}, {
+   defaultNavigationOptions: ({ navigation }) => {
+      return {
+         headerLeft: (
+            <Text>AQUI</Text>
+         )
+      }
    }
 })
 
