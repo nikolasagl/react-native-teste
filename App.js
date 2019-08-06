@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text } from 'react-native'
 import { createAppContainer, createStackNavigator, createDrawerNavigator, createBottomTabNavigator } from 'react-navigation'
+import Icon from 'react-native-vector-icons/Ionicons'
 import './src/config/statusBarConfig'
 import Login from './src/components/pages/login'
 import RecoverPassword from './src/components/pages/recover'
@@ -39,6 +40,7 @@ const stackNavigator = createStackNavigator(
       navigationOptions: () => ({
          title: 'Login',
          headerBackTitle: null,
+         headerLeft: null,
          headerStyle: {
             backgroundColor: '#374a63'
          },
@@ -49,6 +51,7 @@ const stackNavigator = createStackNavigator(
       screen: RecoverPassword,
       navigationOptions: () => ({
          title: 'Recuperar Senha',
+         headerLeft: null,
          headerStyle: {
             backgroundColor: '#374a63'
          },
@@ -69,7 +72,11 @@ const stackNavigator = createStackNavigator(
    defaultNavigationOptions: ({ navigation }) => {
       return {
          headerLeft: (
-            <Text>AQUI</Text>
+            <Icon 
+               style={{paddingLeft: 15, color: 'white'}}
+               name="md-menu" 
+               size={30} 
+               onPress={() => navigation.toggleDrawer()}/>
          )
       }
    }
