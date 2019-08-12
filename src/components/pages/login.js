@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get('window')
 
 const radioOptions = [
    { key: 1, text: 'CPF' },
-   { key: 2, text: 'CNPJ' },
+   { key: 2, text: 'CNPJ' }
 ]
 
 const DismissKeyboard = ({ children }) => (
@@ -36,6 +36,7 @@ class Login extends Component {
 
    _login = async () => {
       /* 
+      METODO QUE REALIZA VERIFICAÇAO NO BACKEND
       const response = await api.post('/login', this.state)
       if (response.data !== null) {}
       */
@@ -44,11 +45,11 @@ class Login extends Component {
          index: 0,
          actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
       });
-      this.props.navigation.dispatch(resetAction);
+      this.props.navigation.dispatch(resetAction)
    }
 
-   _forgotPass = async () => {
-      this.props.navigation.navigate('RecoverPassword')
+   _forgotPass = () => {
+      this.props.navigation.navigate('RecuperarSenha')
    }
 
    _radioHandler = (val) => {

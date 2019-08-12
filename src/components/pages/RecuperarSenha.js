@@ -18,7 +18,7 @@ const DismissKeyboard = ({ children }) => (
    </TouchableWithoutFeedback>
 )
 
-class RecoverPassword extends Component {
+class RecuperarSenha extends Component {
 
    constructor(props) {
       super(props)
@@ -81,7 +81,7 @@ class RecoverPassword extends Component {
    }
 }
 
-export default RecoverPassword
+export default RecuperarSenha
 
 const styles = StyleSheet.create({
    container: {
