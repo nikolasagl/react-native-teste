@@ -18,10 +18,6 @@ class Configuracoes extends Component {
       }
    }
 
-   componentDidMount() {
-      this._loadData()
-   }
-
    _loadData = async () => {
       const response = await api.get('/user/2')
 
@@ -39,6 +35,8 @@ class Configuracoes extends Component {
    }
 
    render() {
+      this._loadData()
+
       return (
          <View style={styles.container}>
 

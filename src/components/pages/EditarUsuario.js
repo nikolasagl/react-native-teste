@@ -19,10 +19,6 @@ class EditarUsuario extends Component {
       }
    }
 
-   componentDidMount() {
-      this._loadData()
-   }
-
    _loadData = async () => {
       const response = await api.get('/user/edit/' + this.state.id)
 
@@ -32,6 +28,8 @@ class EditarUsuario extends Component {
    }
 
    render() {
+      this._loadData()
+
       return (
          <View style={styles.container}>
 

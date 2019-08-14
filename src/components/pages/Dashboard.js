@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-import FlatListWithEnd from 'react-native-flatlist-with-end'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert, Platform } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
+import Intl from 'intl'
+import 'intl/locale-data/jsonp/pt-BR'
 import { Icon } from 'react-native-elements'
 
 import api from '../../services/api'
-import { ScrollView } from 'react-native-gesture-handler';
 
 const { height, width } = Dimensions.get('window')
 
@@ -18,18 +19,18 @@ class Dashboard extends Component {
       }
    }
 
-   componentDidMount() {
-      this._loadDash()
-   }
-
    _loadDash = async () => {
-      const response = await api.get('/dashboard/2')
-
-      var { dash } = response.data
-
-      dash = this._loadDashIcons(dash)
-
-      this.setState({ dash })
+      try {
+         const response = await api.get('/dashboard/2')         
+         
+         var { dash } = response.data
+   
+         dash = this._loadDashIcons(dash)
+   
+         this.setState({ dash })
+      } catch (error) {
+         Alert.alert('Erro', 'Verifique sua conexão e tente novamente.')
+      }
    }
 
    _loadDashIcons = (dash) => {
@@ -80,6 +81,7 @@ class Dashboard extends Component {
    _resgate = () => { }
 
    render() {
+      this._loadDash()
 
       var cards = []
 
@@ -91,7 +93,7 @@ class Dashboard extends Component {
                <View style={styles.card}>
                   <View style={styles.cardHeader}>
                      <Text style={styles.realSign}>R$</Text>
-                     <Text style={styles.value}>{item.value != null ? item.value.toLocaleString('pt-BR') : '0,00'}</Text>
+                     <Text style={styles.value}>{item.value != null ? new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(item.value) : '0,00'}</Text>
                   </View>
                   <View style={styles.cardBody}>
                      <Text style={styles.label}>{item.label}</Text>
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#f2f4f6',
    },
    list: {
-      padding: 35
+      padding: 35,
    },
    card: {
       backgroundColor: 'white',
@@ -163,10 +165,6 @@ const styles = StyleSheet.create({
       marginBottom: 25,
       borderRadius: 6,
       shadowOpacity: 0.25,
-      shadowOffset: {
-         height: 0,
-         width: 0,
-      },
       elevation: 2,
       padding: 30
    },
@@ -199,12 +197,18 @@ const styles = StyleSheet.create({
       width: 60,
       height: 60,
       position: "absolute",
-      top: -10,
-      left: -10
+      ...Platform.select({
+         ios: {
+            top: -10,
+            left: -10
+         },
+         android: {}
+      })
    },
    btnView: {
       paddingBottom: 20,
-      alignItems: "center"
+      alignItems: "center",
+      marginBottom: Platform.OS === 'ios' ? 10 : 35
    },
    resgateBtn: {
       flexDirection: "row",
@@ -213,10 +217,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#374a63',
       borderRadius: 6,
       shadowOpacity: 0.25,
-      shadowOffset: {
-         height: 0,
-         width: 0,
-      },
       elevation: 2,
       alignItems: "center",
       justifyContent: "center",
@@ -229,10 +229,6 @@ const styles = StyleSheet.create({
       marginBottom: 5,
       borderRadius: 6,
       shadowOpacity: 0.25,
-      shadowOffset: {
-         height: 0,
-         width: 0,
-      },
       elevation: 2,
       alignItems: "center",
       justifyContent: "center",

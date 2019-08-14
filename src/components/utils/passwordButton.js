@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Dimensions, TouchableOpacity, StyleSheet } from 'react-native'
+import { encode as btoa } from 'base-64'
 
 const { height, width } = Dimensions.get('window')
 

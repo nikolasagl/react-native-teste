@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Alert, StyleSheet, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { View, Text, TextInput, Platform, StyleSheet, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import { TextInputMask } from 'react-native-masked-text'
+
 import RadioButton from '../utils/radioButton'
 import PasswordButton from '../utils/passwordButton'
 import HomeImage from '../utils/homeImage'
+
+import { validateCpf, removeCpfMask } from '../../helpers/mainHelper'
 
 import api from '../../services/api'
 
@@ -29,23 +32,84 @@ class Login extends Component {
       this.state = {
          username: '',
          password: '',
+         radio: 1,
+
          passwordMask: '',
-         radio: 1
+         validUsername: '',
+         validPassword: '',
+         usernameError: '',
+         passwordError: '',
+         backendError: ''
       }
    }
 
-   _login = async () => {
-      /* 
-      METODO QUE REALIZA VERIFICAÇAO NO BACKEND
-      const response = await api.post('/login', this.state)
-      if (response.data !== null) {}
-      */
+   _validateForm = async () => {
+      this.setState({
+         usernameError: await this._validateField('username', 'CPF', 1),
+         passwordError: await this._validateField('password', 'Senha', 2)
+      })
 
-      const resetAction = StackActions.reset({
-         index: 0,
-         actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
-      });
-      this.props.navigation.dispatch(resetAction)
+      if (this.state.validUsername && this.state.validPassword)
+         this._login()
+   }
+
+   _validateField = (element, label, rule) => {
+      var field = this.state[element]
+      var errorMsg = ''
+
+      switch (rule) {
+         case 1:
+            validCpf = validateCpf(removeCpfMask(this.state[element]))
+            if (field.length != 0 && validCpf == true) {
+               this.setState({ validUsername: true })         
+            } else {
+               this.setState({ validUsername: false })         
+               errorMsg += 'Digite um CPF válido.'
+            }
+            break;
+      
+         case 2:
+            if (field.length != 0) {    
+               this.setState({ validPassword: true })       
+            } else {
+               this.setState({ validPassword: false })    
+               errorMsg += 'O campo senha é obrigatorio.'
+            }
+            break;
+      }
+
+      return errorMsg
+   }
+
+   _login = async () => {
+      // METODO QUE REALIZA VERIFICAÇAO NO BACKEND
+      const response = await api.post('/login', {
+         username: this.state.username,
+         password: this.state.password,
+         radio: this.state.radio
+      })
+      
+      if (response.data !== null) {
+         if ('error' in response.data) {
+            this.setState({
+               backendError: response.data.error
+            })
+         } else if ('user' in response.data) {
+            const resetAction = StackActions.reset({
+               index: 0,
+               actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
+            })
+            this.props.navigation.dispatch(resetAction)
+         } else {
+            this.setState({
+               backendError: 'Autenticação falhou. Tente novamente mais tarde.'
+            })
+         }
+      } else {
+         this.setState({
+            backendError: 'Autenticação falhou. Tente novamente mais tarde.'
+         })
+      }
    }
 
    _forgotPass = () => {
@@ -67,6 +131,7 @@ class Login extends Component {
 
    _clearPassword = () => {
       this.setState({
+         password: '',
          passwordMask: ''
       })
    }
@@ -75,7 +140,10 @@ class Login extends Component {
       return (
          <DismissKeyboard>
 
-            <KeyboardAvoidingView style={styles.container} behavior='padding'>
+            <KeyboardAvoidingView 
+               style={styles.container} 
+               behavior={(Platform.OS === 'ios') ? 'padding' : null}
+               keyboardVerticalOffset={Platform.select({ios: 0, android: 100})}>
 
                <View style={styles.image}>
                   <HomeImage />
@@ -85,8 +153,10 @@ class Login extends Component {
 
                   <RadioButton options={radioOptions} action={this._radioHandler} />
 
+                  <Text style={this.state.backendError != '' ? {color: 'red', alignSelf: "center"} : {display: "none"}}>{this.state.backendError}</Text>                  
+
                   <TextInputMask
-                     style={styles.input}
+                     style={[styles.input, this.state.validUsername === false ? styles.error : null]}
                      placeholder={this.state.radio === 1 ? 'CPF' : 'CNPJ'}
                      placeholderTextColor='#95989c'
                      autoCapitalize='none'
@@ -96,7 +166,9 @@ class Login extends Component {
                      type={this.state.radio === 1 ? 'cpf' : 'cnpj'}>
                   </TextInputMask>
 
-                  <View style={styles.passwordInput}>
+                  <Text style={this.state.validUsername === false ? {color: 'red'} : {display: "none"}}>{this.state.usernameError}</Text>
+
+                  <View style={[styles.passwordInput, this.state.validPassword === false ? styles.error : null]}>
                      <TextInput
                         style={styles.txtClearPass}
                         secureTextEntry={true}
@@ -112,10 +184,12 @@ class Login extends Component {
                         <Text style={{ color: '#acacac' }}>Limpar</Text>
                      </TouchableOpacity>
                   </View>
+                  
+                  <Text style={this.state.validPassword === false ? {color: 'red'} : {display: "none"}}>{this.state.passwordError}</Text>
 
                   <PasswordButton action={this._passwordHandler} />
 
-                  <TouchableOpacity style={styles.btnContainer} onPress={this._login}>
+                  <TouchableOpacity style={styles.btnContainer} onPress={this._validateForm}>
                      <Text style={styles.btn}>Entrar</Text>
                   </TouchableOpacity>
 
@@ -142,19 +216,21 @@ const styles = StyleSheet.create({
    },
    input: {
       width: width * 0.8,
-      height: height * 0.05,
+      height: 40,
       borderRadius: height * 0.01,
       fontSize: 16,
       borderColor: '#cbcdd1',
       borderWidth: 1,
-      marginTop: height * 0.01,
       paddingLeft: height * 0.02,
-      shadowOpacity: 0.25,
-      shadowOffset: {
-         height: 0,
-         width: 0,
-      },
-      elevation: 2,
+      marginTop: height * 0.01,
+      ...Platform.select({
+         ios: {
+            shadowOpacity: 0.25,
+         },
+         android: {
+            elevation: 1,
+         }
+      })
    },
    btnContainer: {
       backgroundColor: '#374a63',
@@ -163,10 +239,6 @@ const styles = StyleSheet.create({
       height: height * 0.05,
       borderRadius: height * 0.01,
       shadowOpacity: 0.25,
-      shadowOffset: {
-         height: 0,
-         width: 0,
-      },
       elevation: 2,
       alignItems: 'center',
       justifyContent: 'center',
@@ -177,9 +249,14 @@ const styles = StyleSheet.create({
    },
    image: {
       flex: 0.2,
+      ...Platform.select({
+         android: {
+            marginBottom: 25,
+         }
+      })
    },
    content: {
-      flex: 0.4,
+      flex: Platform.OS === 'ios' ? 0.5 : 0.6,
    },
    link: {
       color: '#acacac',
@@ -190,19 +267,22 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       width: width * 0.8,
-      height: height * 0.05,
+      height: 40,
       borderRadius: height * 0.01,
-      fontSize: 16,
       borderColor: '#cbcdd1',
       borderWidth: 1,
       marginTop: height * 0.01,
       paddingLeft: height * 0.02,
-      shadowOpacity: 0.25,
-      shadowOffset: {
-         height: 0,
-         width: 0,
-      },
-      elevation: 2,
+      ...Platform.select({
+         ios: {
+            fontSize: 16,
+            shadowOpacity: 0.25,
+         },
+         android: {
+            fontSize: 20,
+            elevation: 1,
+         }
+      })
    },
    txtClearPass: {
       width: width * 0.6,
@@ -210,5 +290,9 @@ const styles = StyleSheet.create({
    btnClearPass: {
       alignSelf: "center",
       marginRight: width * 0.03
+   },
+   error: {
+      borderWidth: 1,
+      borderColor: 'red'
    }
 })
