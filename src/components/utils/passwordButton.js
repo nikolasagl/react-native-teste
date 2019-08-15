@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Dimensions, TouchableOpacity, StyleSheet } from 'react-native'
-import { encode as btoa } from 'base-64'
+import { shuffleArray, utoa, negativeArray } from '../../helpers/mainHelper'
 
 const { height, width } = Dimensions.get('window')
 
@@ -10,7 +10,8 @@ export default class PasswordButton extends Component {
       super(props)
       
       this.state = {
-         encoded: null
+         encoded: null,
+         teste: {0:[], 1:[], 2:[], 3:[], 4:[]}
       }
    }
 
@@ -21,33 +22,29 @@ export default class PasswordButton extends Component {
    render() {
       var buttons = []
 
-      function shuffleArray(array) {
-         for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-         }
-         return array
-      }
-
-      var numeros = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 0])
+      var numeros = negativeArray(shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]))
 
       var duplicate = [numeros[0], numeros[4], numeros[2], numeros[6], numeros[8]]
 
       var i = 9
 
       for (let index = 0; index < duplicate.length; index++) {
+         var teste = this.state.teste
+         teste[index] = [i, i-1]
+         this.setState({ teste })
+
          const element = duplicate[index]
 
          buttons.push(
             <TouchableOpacity
-               key={i}
-               style={styles.btn}
-               onPress={async () => {
-                  await this.setState({
-                     encoded: btoa("{" + element + "," + numeros[i] + "," + numeros[i - 1] + "}")
-                  })
-                  this.props.action(this.state.encoded)
-               }}>
+            key={index}
+            style={styles.btn}
+            onPress={async () => {
+               await this.setState({
+                  encoded: utoa("{" + element + "," + numeros[this.state.teste[index][0]] + "," + numeros[this.state.teste[index][1]] + "}")
+               })
+               this.props.action(this.state.encoded)
+            }}>
                <Text style={styles.btnText}>{element} ou {numeros[i--]} ou {numeros[i--]}</Text>
             </TouchableOpacity>
          )
