@@ -30,7 +30,7 @@ class RecuperarSenha extends Component {
    }
 
    _recover = async () => {
-      const response = await api.post('/recover', this.state)
+      const response = await api.post('/recuperar', this.state)
 
       console.log(response)
    }

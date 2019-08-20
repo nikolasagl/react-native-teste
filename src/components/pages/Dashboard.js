@@ -21,7 +21,7 @@ class Dashboard extends Component {
 
    _loadDash = async () => {
       try {
-         const response = await api.get('/dashboard/2')         
+         const response = await api.get('/usuario/2/dashboard')         
          
          var { dash } = response.data
    

@@ -7,7 +7,7 @@ import RadioButton from '../utils/radioButton'
 import PasswordButton from '../utils/passwordButton'
 import HomeImage from '../utils/homeImage'
 
-import { validateCpf, removeCpfMask } from '../../helpers/mainHelper'
+import { validateCpf, validateCnpj } from '../../helpers/mainHelper'
 
 import api from '../../services/api'
 
@@ -59,12 +59,13 @@ class Login extends Component {
 
       switch (rule) {
          case 1:
-            validCpf = validateCpf(removeCpfMask(this.state[element]))
-            if (field.length != 0 && validCpf == true) {
+            var aux = this.state.radio === 1 ? validateCpf(this.state[element]) : validateCnpj(this.state[element])
+
+            if (field.length != 0 && aux == true) {
                this.setState({ validUsername: true })         
             } else {
                this.setState({ validUsername: false })         
-               errorMsg += 'Digite um CPF válido.'
+               errorMsg += this.state.radio === 1 ? 'Digite um CPF válido.' : 'Digite um CNPJ válido.'
             }
             break;
       
@@ -94,7 +95,7 @@ class Login extends Component {
             this.setState({
                backendError: response.data.error
             })
-         } else if ('user' in response.data) {
+         } else if ('usuario' in response.data) {
             const resetAction = StackActions.reset({
                index: 0,
                actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
@@ -102,12 +103,12 @@ class Login extends Component {
             this.props.navigation.dispatch(resetAction)
          } else {
             this.setState({
-               backendError: 'Autenticação falhou. Tente novamente mais tarde.'
+               backendError: 'Autenticação falhou. Tente novamente mais tarde1.'
             })
          }
       } else {
          this.setState({
-            backendError: 'Autenticação falhou. Tente novamente mais tarde.'
+            backendError: 'Autenticação falhou. Tente novamente mais tarde2.'
          })
       }
    }
