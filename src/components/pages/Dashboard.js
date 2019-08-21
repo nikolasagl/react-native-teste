@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert, Platform } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 import { ScrollView } from 'react-native-gesture-handler'
 import Intl from 'intl'
 import 'intl/locale-data/jsonp/pt-BR'
 import { Icon } from 'react-native-elements'
+import { AsyncGetItem, AsyncClear } from '../../helpers/mainHelper'
 
 import api from '../../services/api'
 
@@ -21,49 +23,35 @@ class Dashboard extends Component {
 
    _loadDash = async () => {
       try {
-         const response = await api.get('/usuario/2/dashboard')         
+         const response = await api.get('/usuario/2/dashboard', { headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') } })         
          
          var { dash } = response.data
    
          dash = this._loadDashIcons(dash)
    
          this.setState({ dash })
+
       } catch (error) {
-         Alert.alert('Erro', 'Verifique sua conexão e tente novamente.')
+         AsyncClear()
+         Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error )
+         const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+         })
+         this.props.navigation.dispatch(resetAction)
       }
    }
 
    _loadDashIcons = (dash) => {
 
       const icons = [
-         {
-            icon: 'coin',
-            type: 'material-community'
-         },
-         {
-            icon: 'attach-money',
-            type: 'material'
-         },
-         {
-            icon: 'ticket',
-            type: 'foundation'
-         },
-         {
-            icon: 'dollar-bill',
-            type: 'foundation'
-         },
-         {
-            icon: 'cash-usd',
-            type: 'material-community'
-         },
-         {
-            icon: 'linechart',
-            type: 'antdesign'
-         },
-         {
-            icon: 'credit-card',
-            type: 'font-awesome'
-         },
+         { icon: 'coin', type: 'material-community' },
+         { icon: 'attach-money', type: 'material' },
+         { icon: 'ticket', type: 'foundation' },
+         { icon: 'dollar-bill', type: 'foundation' },
+         { icon: 'cash-usd', type: 'material-community' },
+         { icon: 'linechart', type: 'antdesign' },
+         { icon: 'credit-card', type: 'font-awesome' },
       ]
 
       for (let index = 0; index < dash.length; index++) {

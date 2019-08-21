@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Alert } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 import { Icon } from 'react-native-elements'
+import { AsyncGetItem, AsyncClear } from '../../helpers/mainHelper'
 
 import api from '../../services/api'
 
@@ -12,26 +14,37 @@ class Configuracoes extends Component {
       super(props)
 
       this.state = {
-         user: '',
+         usuario: '',
          cidade: '',
          estado: ''
       }
    }
 
    _loadData = async () => {
-      const response = await api.get('/user/2')
-
-      const { user } = response.data
-
-      this.setState({
-         user: user,
-         cidade: user.cidade_pes.nome_cid,
-         estado: user.estado_pes.uf_est
-      })
+      try {
+         const response = await api.get('/usuario/2', { headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') } })
+   
+         const { usuario } = response.data
+   
+         this.setState({
+            usuario: usuario,
+            cidade: usuario.cidade_pes.nome_cid,
+            estado: usuario.estado_pes.uf_est
+         })
+         
+      } catch (error) {
+         AsyncClear()
+         Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error )
+         const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+         })
+         this.props.navigation.dispatch(resetAction)
+      }
    }
 
    _editarPerfil = () => {
-      this.props.navigation.navigate('EditarUsuario', { id: this.state.user.codigo_pes })
+      this.props.navigation.navigate('EditarUsuario', { id: this.state.usuario.codigo_pes })
    }
 
    render() {
@@ -57,22 +70,22 @@ class Configuracoes extends Component {
                   <View style={styles.cardBody}>
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Nome: </Text>
-                        <Text style={styles.value}>{this.state.user.nome_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.nome_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>CPF: </Text>
-                        <Text style={styles.value}>{this.state.user.cpf_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.cpf_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>RG: </Text>
-                        <Text style={styles.value}>{this.state.user.rg_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.rg_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Data Nasc.: </Text>
-                        <Text style={styles.value}>{this.state.user.dtnascimento_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.dtnascimento_pes}</Text>
                      </View>
                   </View>
 
@@ -87,17 +100,17 @@ class Configuracoes extends Component {
                   <View style={styles.cardBody}>
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>CEP: </Text>
-                        <Text style={styles.value}>{this.state.user.cep_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.cep_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Endereço: </Text>
-                        <Text style={styles.value}>{this.state.user.endereco_pes + ', ' + this.state.user.numero_pes + ', ' + this.state.user.bairro_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.endereco_pes + ', ' + this.state.usuario.numero_pes + ', ' + this.state.usuario.bairro_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Complemento: </Text>
-                        <Text style={styles.value}>{this.state.user.complemento_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.complemento_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
@@ -107,12 +120,12 @@ class Configuracoes extends Component {
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Telefone: </Text>
-                        <Text style={styles.value}>{this.state.user.telefone_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.telefone_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Email: </Text>
-                        <Text style={styles.value}>{this.state.user.email_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.email_pes}</Text>
                      </View>
                   </View>
 
@@ -127,27 +140,27 @@ class Configuracoes extends Component {
                   <View style={styles.cardBody}>
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Banco: </Text>
-                        <Text style={styles.value}>{this.state.user.banco_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.banco_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Nº Banco: </Text>
-                        <Text style={styles.value}>{this.state.user.numerobanco_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.numerobanco_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Agência: </Text>
-                        <Text style={styles.value}>{this.state.user.agencia_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.agencia_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Conta: </Text>
-                        <Text style={styles.value}>{this.state.user.conta_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.conta_pes}</Text>
                      </View>
 
                      <View style={styles.contentRow}>
                         <Text style={styles.label}>Nome Titular: </Text>
-                        <Text style={styles.value}>{this.state.user.nometitular_pes}</Text>
+                        <Text style={styles.value}>{this.state.usuario.nometitular_pes}</Text>
                      </View>
                   </View>
 

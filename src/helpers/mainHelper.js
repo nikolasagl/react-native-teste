@@ -1,4 +1,5 @@
 const { encode, decode } = require('base-64')
+import { AsyncStorage } from 'react-native'
 
 module.exports = {
 
@@ -37,7 +38,7 @@ module.exports = {
 
    validateCpf(strCPF) {
       strCPF = strCPF.replace(/\D/g, '');
-      
+
       var Soma;
       var Resto;
       Soma = 0;
@@ -108,5 +109,32 @@ module.exports = {
          return false;
 
       return true;
+   },
+
+   async AsyncSetItem(key, value) {
+      try {
+         return await AsyncStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+         // console.error('AsyncStorage#setItem error: ' + error.message);
+      }
+   },
+   async AsyncGetItem(key) {
+      return await AsyncStorage.getItem(key)
+         .then((result) => {
+            if (result) {
+               try {
+                  result = JSON.parse(result);
+               } catch (e) {
+                  // console.error('AsyncStorage#getItem error deserializing JSON for key: ' + key, e.message);
+               }
+            }
+            return result;
+         });
+   },
+   async AsyncRemoveItem(key) {
+      return await AsyncStorage.removeItem(key);
+   },
+   async AsyncClear() {
+      return await AsyncStorage.clear()
    }
 } 

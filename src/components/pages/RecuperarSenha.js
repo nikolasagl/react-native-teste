@@ -31,8 +31,6 @@ class RecuperarSenha extends Component {
 
    _recover = async () => {
       const response = await api.post('/recuperar', this.state)
-
-      console.log(response)
    }
 
    _radioHandler = (val) => {

@@ -1,13 +1,24 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Platform, StyleSheet, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import { TextInputMask } from 'react-native-masked-text'
+import { 
+   View, 
+   Text, 
+   TextInput, 
+   Platform, 
+   StyleSheet, 
+   Dimensions, 
+   TouchableOpacity, 
+   TouchableWithoutFeedback, 
+   Keyboard, 
+   KeyboardAvoidingView
+} from 'react-native'
 
 import RadioButton from '../utils/radioButton'
 import PasswordButton from '../utils/passwordButton'
 import HomeImage from '../utils/homeImage'
 
-import { validateCpf, validateCnpj } from '../../helpers/mainHelper'
+import { validateCpf, validateCnpj, AsyncSetItem, AsyncGetItem } from '../../helpers/mainHelper'
 
 import api from '../../services/api'
 
@@ -62,7 +73,8 @@ class Login extends Component {
             var aux = this.state.radio === 1 ? validateCpf(this.state[element]) : validateCnpj(this.state[element])
 
             if (field.length != 0 && aux == true) {
-               this.setState({ validUsername: true })         
+               this.setState({ validUsername: true })    
+
             } else {
                this.setState({ validUsername: false })         
                errorMsg += this.state.radio === 1 ? 'Digite um CPF válido.' : 'Digite um CNPJ válido.'
@@ -72,6 +84,7 @@ class Login extends Component {
          case 2:
             if (field.length != 0) {    
                this.setState({ validPassword: true })       
+
             } else {
                this.setState({ validPassword: false })    
                errorMsg += 'O campo senha é obrigatorio.'
@@ -83,7 +96,6 @@ class Login extends Component {
    }
 
    _login = async () => {
-      // METODO QUE REALIZA VERIFICAÇAO NO BACKEND
       const response = await api.post('/login', {
          username: this.state.username,
          password: this.state.password,
@@ -95,17 +107,25 @@ class Login extends Component {
             this.setState({
                backendError: response.data.error
             })
+
          } else if ('usuario' in response.data) {
+            AsyncSetItem('id', response.data.usuario.codigo_pes)
+            AsyncSetItem('nome', response.data.usuario.nome_pes)
+            AsyncSetItem('email', response.data.usuario.email_pes)
+            AsyncSetItem('token', response.data.usuario.token)
+            
             const resetAction = StackActions.reset({
                index: 0,
                actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
             })
             this.props.navigation.dispatch(resetAction)
+
          } else {
             this.setState({
                backendError: 'Autenticação falhou. Tente novamente mais tarde1.'
             })
          }
+
       } else {
          this.setState({
             backendError: 'Autenticação falhou. Tente novamente mais tarde2.'
@@ -154,7 +174,7 @@ class Login extends Component {
 
                   <RadioButton options={radioOptions} action={this._radioHandler} />
 
-                  <Text style={this.state.backendError != '' ? {color: 'red', alignSelf: "center"} : {display: "none"}}>{this.state.backendError}</Text>                  
+                  <Text style={this.state.backendError != '' ? styles.backendError : {display: "none"}}>{this.state.backendError}</Text>                  
 
                   <TextInputMask
                      style={[styles.input, this.state.validUsername === false ? styles.error : null]}
@@ -237,7 +257,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#374a63',
       marginTop: height * 0.02,
       width: width * 0.8,
-      height: height * 0.05,
+      height: 38,
       borderRadius: height * 0.01,
       shadowOpacity: 0.25,
       elevation: 2,
@@ -295,5 +315,10 @@ const styles = StyleSheet.create({
    error: {
       borderWidth: 1,
       borderColor: 'red'
+   },
+   backendError: {
+      width: width * 0.785,
+      color: 'red', 
+      alignSelf: "center"
    }
 })
