@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Dimensions, ScrollView, TextInput } from 'react-native'
+import { View, StyleSheet, Dimensions,} from 'react-native'
 
 import api from '../../services/api'
 import Form from '../utils/userEditForm'
@@ -20,7 +20,7 @@ class EditarUsuario extends Component {
    }
 
    _loadData = async () => {
-      const response = await api.get('/user/edit/' + this.state.id)
+      const response = await api.get('/user/' + this.state.id + '/edit/')
 
       var data = response.data
 
@@ -32,13 +32,7 @@ class EditarUsuario extends Component {
 
       return (
          <View style={styles.container}>
-
-            <ScrollView>
-
-               <Form />
-
-            </ScrollView>
-
+            <Form />
          </View>
       )
    }

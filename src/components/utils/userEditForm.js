@@ -1,204 +1,207 @@
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TextInput, ScrollView } from 'react-native'
 import { withFormik } from 'formik'
 
 const { height, width } = Dimensions.get('window')
 
 const Form = (props) => (
-   <View style={styles.form}>
+   <ScrollView
+      horizontal={true}>
+      <View style={styles.form}>
 
-      <View style={styles.section}>
+         <View style={styles.section}>
 
-         <Text style={styles.sectionTitle}>Dados Pessoais</Text>
+            <Text style={styles.sectionTitle}>Dados Pessoais</Text>
 
-         <Text style={styles.label}>Data de Nascimento</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.data_nasc} >
-         </TextInput>
+            <Text style={styles.label}>Data de Nascimento</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.data_nasc} >
+            </TextInput>
 
-         <Text style={styles.label}>Nome</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.nome} >
-         </TextInput>
+            <Text style={styles.label}>Nome</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.nome} >
+            </TextInput>
 
-         <Text style={styles.label}>CPF</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.cpf} >
-         </TextInput>
+            <Text style={styles.label}>CPF</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.cpf} >
+            </TextInput>
 
-         <Text style={styles.label}>RG</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.rg} >
-         </TextInput>
+            <Text style={styles.label}>RG</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.rg} >
+            </TextInput>
+
+         </View>
+
+         <View style={styles.section}>
+
+            <Text style={styles.sectionTitle}>Dados Endereço</Text>
+
+            <Text style={styles.label}>CEP</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.cep} >
+            </TextInput>
+
+            <Text style={styles.label}>Endereço</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.endereco} >
+            </TextInput>
+
+            <Text style={styles.label}>Bairro</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.bairro} >
+            </TextInput>
+
+            <Text style={styles.label}>Numero</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.numero} >
+            </TextInput>
+
+            <Text style={styles.label}>Complemento</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.complemento} >
+            </TextInput>
+
+            <Text style={styles.label}>Estado</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.estado} >
+            </TextInput>
+
+            <Text style={styles.label}>Cidade</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.cidade} >
+            </TextInput>
+
+         </View>
+
+         <View style={styles.section}>
+
+            <Text style={styles.sectionTitle}>Dados de Contato</Text>
+
+            <Text style={styles.label}>Telefone</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.telefone} >
+            </TextInput>
+
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.email} >
+            </TextInput>
+
+         </View>
+
+         <View style={styles.section}>
+
+            <Text style={styles.sectionTitle}>Dados Bancários</Text>
+
+            <Text style={styles.label}>Banco</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.banco} >
+            </TextInput>
+
+            <Text style={styles.label}>Número Banco</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.num_banco} >
+            </TextInput>
+
+            <Text style={styles.label}>Agência</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.agencia} >
+            </TextInput>
+
+            <Text style={styles.label}>Conta</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.conta} >
+            </TextInput>
+
+            <Text style={styles.label}>Nome Titular</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.titular} >
+            </TextInput>
+
+         </View>
+
+         <View style={styles.section}>
+
+            <Text style={styles.sectionTitle}>Dados Login</Text>
+
+            <Text style={styles.label}>Login</Text>
+            <TextInput
+               style={styles.input}
+               value={props.values.login}
+               editable={false} >
+            </TextInput>
+
+            <Text style={styles.label}>Alterar Senha</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.nova_senha} >
+            </TextInput>
+
+            <Text style={styles.label}>Confirmar nova Senha</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.nova_senha_conf} >
+            </TextInput>
+
+            <Text style={styles.label}>Assinatura Digital</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.ass_digital} >
+            </TextInput>
+
+            <Text style={styles.label}>Confirmar Assinatura Digital</Text>
+            <TextInput
+               style={styles.input}
+               onChangeText={() => { }}
+               value={props.values.ass_digital_conf} >
+            </TextInput>
+
+         </View>
 
       </View>
-
-      <View style={styles.section}>
-
-         <Text style={styles.sectionTitle}>Dados Endereço</Text>
-
-         <Text style={styles.label}>CEP</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.cep} >
-         </TextInput>
-
-         <Text style={styles.label}>Endereço</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.endereco} >
-         </TextInput>
-
-         <Text style={styles.label}>Bairro</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.bairro} >
-         </TextInput>
-
-         <Text style={styles.label}>Numero</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.numero} >
-         </TextInput>
-
-         <Text style={styles.label}>Complemento</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.complemento} >
-         </TextInput>
-
-         <Text style={styles.label}>Estado</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.estado} >
-         </TextInput>
-
-         <Text style={styles.label}>Cidade</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.cidade} >
-         </TextInput>
-
-      </View>
-
-      <View style={styles.section}>
-
-         <Text style={styles.sectionTitle}>Dados de Contato</Text>
-
-         <Text style={styles.label}>Telefone</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.telefone} >
-         </TextInput>
-
-         <Text style={styles.label}>Email</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.email} >
-         </TextInput>
-
-      </View>
-
-      <View style={styles.section}>
-
-         <Text style={styles.sectionTitle}>Dados Bancários</Text>
-
-         <Text style={styles.label}>Banco</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.banco} >
-         </TextInput>
-
-         <Text style={styles.label}>Número Banco</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.num_banco} >
-         </TextInput>
-
-         <Text style={styles.label}>Agência</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.agencia} >
-         </TextInput>
-
-         <Text style={styles.label}>Conta</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.conta} >
-         </TextInput>
-
-         <Text style={styles.label}>Nome Titular</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.titular} >
-         </TextInput>
-
-      </View>
-
-      <View style={styles.section}>
-
-         <Text style={styles.sectionTitle}>Dados Login</Text>
-
-         <Text style={styles.label}>Login</Text>
-         <TextInput
-            style={styles.input}
-            value={props.values.login}
-            editable={false} >
-         </TextInput>
-
-         <Text style={styles.label}>Alterar Senha</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.nova_senha} >
-         </TextInput>
-
-         <Text style={styles.label}>Confirmar nova Senha</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.nova_senha_conf} >
-         </TextInput>
-
-         <Text style={styles.label}>Assinatura Digital</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.ass_digital} >
-         </TextInput>
-
-         <Text style={styles.label}>Confirmar Assinatura Digital</Text>
-         <TextInput
-            style={styles.input}
-            onChangeText={() => { }}
-            value={props.values.ass_digital_conf} >
-         </TextInput>
-
-      </View>
-
-   </View>
+   </ScrollView>
 )
 
 export default withFormik({
