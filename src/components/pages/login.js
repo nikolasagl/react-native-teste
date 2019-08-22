@@ -96,41 +96,46 @@ class Login extends Component {
    }
 
    _login = async () => {
-      const response = await api.post('/login', {
-         username: this.state.username,
-         password: this.state.password,
-         radio: this.state.radio
+      const resetAction = StackActions.reset({
+         index: 0,
+         actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
       })
+      this.props.navigation.dispatch(resetAction)
+      // const response = await api.post('/login', {
+      //    username: this.state.username,
+      //    password: this.state.password,
+      //    radio: this.state.radio
+      // })
       
-      if (response.data !== null) {
-         if ('error' in response.data) {
-            this.setState({
-               backendError: response.data.error
-            })
+      // if (response.data !== null) {
+      //    if ('error' in response.data) {
+      //       this.setState({
+      //          backendError: response.data.error
+      //       })
 
-         } else if ('usuario' in response.data) {
-            AsyncSetItem('id', response.data.usuario.codigo_pes)
-            AsyncSetItem('nome', response.data.usuario.nome_pes)
-            AsyncSetItem('email', response.data.usuario.email_pes)
-            AsyncSetItem('token', response.data.usuario.token)
+      //    } else if ('usuario' in response.data) {
+      //       AsyncSetItem('id', response.data.usuario.codigo_pes)
+      //       AsyncSetItem('nome', response.data.usuario.nome_pes)
+      //       AsyncSetItem('email', response.data.usuario.email_pes)
+      //       AsyncSetItem('token', response.data.usuario.token)
             
-            const resetAction = StackActions.reset({
-               index: 0,
-               actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
-            })
-            this.props.navigation.dispatch(resetAction)
+      //       const resetAction = StackActions.reset({
+      //          index: 0,
+      //          actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
+      //       })
+      //       this.props.navigation.dispatch(resetAction)
 
-         } else {
-            this.setState({
-               backendError: 'Autenticação falhou. Tente novamente mais tarde1.'
-            })
-         }
+      //    } else {
+      //       this.setState({
+      //          backendError: 'Autenticação falhou. Tente novamente mais tarde1.'
+      //       })
+      //    }
 
-      } else {
-         this.setState({
-            backendError: 'Autenticação falhou. Tente novamente mais tarde2.'
-         })
-      }
+      // } else {
+      //    this.setState({
+      //       backendError: 'Autenticação falhou. Tente novamente mais tarde2.'
+      //    })
+      // }
    }
 
    _forgotPass = () => {
@@ -210,9 +215,12 @@ class Login extends Component {
 
                   <PasswordButton action={this._passwordHandler} />
 
-                  <TouchableOpacity style={styles.btnContainer} onPress={this._validateForm}>
+                  <TouchableOpacity style={styles.btnContainer} onPress={this._login}>
                      <Text style={styles.btn}>Entrar</Text>
                   </TouchableOpacity>
+                  {/* <TouchableOpacity style={styles.btnContainer} onPress={this._validateForm}>
+                     <Text style={styles.btn}>Entrar</Text>
+                  </TouchableOpacity> */}
 
                   <TouchableOpacity onPress={this._forgotPass}>
                      <Text style={styles.link}>Esqueci minha senha</Text>

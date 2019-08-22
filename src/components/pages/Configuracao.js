@@ -20,6 +20,10 @@ class Configuracoes extends Component {
       }
    }
 
+   componentDidMount() {
+      this._loadData()
+   }
+
    _loadData = async () => {
       try {
          const response = await api.get('/usuario/2', { headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') } })
@@ -48,8 +52,6 @@ class Configuracoes extends Component {
    }
 
    render() {
-      this._loadData()
-
       return (
          <View style={styles.container}>
 

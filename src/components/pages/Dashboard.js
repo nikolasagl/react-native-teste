@@ -21,6 +21,10 @@ class Dashboard extends Component {
       }
    }
 
+   componentDidMount() {
+      this._loadDash()
+   }
+
    _loadDash = async () => {
       try {
          const response = await api.get('/usuario/2/dashboard', { headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') } })         
@@ -69,8 +73,6 @@ class Dashboard extends Component {
    _resgate = () => { }
 
    render() {
-      this._loadDash()
-
       var cards = []
 
       for (let index = 0; index < this.state.dash.length; index++) {
