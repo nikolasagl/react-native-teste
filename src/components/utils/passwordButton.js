@@ -37,12 +37,12 @@ export default class PasswordButton extends Component {
 
          buttons.push(
             <TouchableOpacity
-            key={index}
-            style={styles.btn}
-            onPress={async () => {
-               await this.setState({
-                  encoded: utoa("{" + element + "," + numeros[this.state.teste[index][0]] + "," + numeros[this.state.teste[index][1]] + "}")
-               })
+               key={index}
+               style={styles.btn}
+               onPress={async () => {
+                  await this.setState({
+                     encoded: utoa("{" + element + "," + numeros[this.state.teste[index][0]] + "," + numeros[this.state.teste[index][1]] + "}")
+                  })
                this.props.action(this.state.encoded)
             }}>
                <Text style={styles.btnText}>{element} ou {numeros[i--]} ou {numeros[i--]}</Text>

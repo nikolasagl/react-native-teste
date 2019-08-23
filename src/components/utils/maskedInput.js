@@ -19,7 +19,6 @@ class MaskedInput extends Component {
                name={name}
                placeholder={label}
                onChangeText={this._handleChange}
-               maskType='datetime'
                type={maskType}
                {...rest} />
             {error && <Text style={styles.error}>{error}</Text>}

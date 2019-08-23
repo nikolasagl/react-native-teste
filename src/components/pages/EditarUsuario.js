@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Dimensions, TextInput, ScrollView, Alert, KeyboardAvoidingView, Button } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, ScrollView, Alert, KeyboardAvoidingView, Button } from 'react-native'
 import { Formik } from 'formik'
 import { AsyncGetItem } from '../../helpers/mainHelper'
 import Input from '../utils/input'
@@ -8,7 +8,6 @@ import MaskedInput from '../utils/maskedInput'
 import usuarioValidation from '../validation/usuarioValidation'
 
 import api from '../../services/api'
-import console = require('console');
 
 const { height, width } = Dimensions.get('window')
 

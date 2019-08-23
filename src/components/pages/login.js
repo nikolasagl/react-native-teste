@@ -18,7 +18,7 @@ import RadioButton from '../utils/radioButton'
 import PasswordButton from '../utils/passwordButton'
 import HomeImage from '../utils/homeImage'
 
-import { validateCpf, validateCnpj, AsyncSetItem, AsyncGetItem } from '../../helpers/mainHelper'
+import { validateCpf, validateCnpj, AsyncSetItem } from '../../helpers/mainHelper'
 
 import api from '../../services/api'
 
@@ -56,7 +56,7 @@ class Login extends Component {
 
    _validateForm = async () => {
       this.setState({
-         usernameError: await this._validateField('username', 'CPF', 1),
+         usernameError: await this._validateField('username', this.state.radio === 1 ? 'CPF' : 'CNPJ', 1),
          passwordError: await this._validateField('password', 'Senha', 2)
       })
 
@@ -71,13 +71,17 @@ class Login extends Component {
       switch (rule) {
          case 1:
             var aux = this.state.radio === 1 ? validateCpf(this.state[element]) : validateCnpj(this.state[element])
-
+            
             if (field.length != 0 && aux == true) {
                this.setState({ validUsername: true })    
 
+            } else if (field.length == 0) {
+               this.setState({ validUsername: false })         
+               errorMsg += `O campo ${label} é obrigatorio.`
+
             } else {
                this.setState({ validUsername: false })         
-               errorMsg += this.state.radio === 1 ? 'Digite um CPF válido.' : 'Digite um CNPJ válido.'
+               errorMsg += `Digite um ${label} válido.`
             }
             break;
       
@@ -87,7 +91,7 @@ class Login extends Component {
 
             } else {
                this.setState({ validPassword: false })    
-               errorMsg += 'O campo senha é obrigatorio.'
+               errorMsg += `O campo ${label} é obrigatorio.`
             }
             break;
       }
@@ -96,46 +100,41 @@ class Login extends Component {
    }
 
    _login = async () => {
-      const resetAction = StackActions.reset({
-         index: 0,
-         actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
+      const response = await api.post('/login', {
+         username: this.state.username,
+         password: this.state.password,
+         radio: this.state.radio
       })
-      this.props.navigation.dispatch(resetAction)
-      // const response = await api.post('/login', {
-      //    username: this.state.username,
-      //    password: this.state.password,
-      //    radio: this.state.radio
-      // })
       
-      // if (response.data !== null) {
-      //    if ('error' in response.data) {
-      //       this.setState({
-      //          backendError: response.data.error
-      //       })
+      if (response.data !== null) {
+         if ('error' in response.data) {
+            this.setState({
+               backendError: response.data.error
+            })
 
-      //    } else if ('usuario' in response.data) {
-      //       AsyncSetItem('id', response.data.usuario.codigo_pes)
-      //       AsyncSetItem('nome', response.data.usuario.nome_pes)
-      //       AsyncSetItem('email', response.data.usuario.email_pes)
-      //       AsyncSetItem('token', response.data.usuario.token)
+         } else if ('usuario' in response.data) {
+            AsyncSetItem('id', response.data.usuario.codigo_pes)
+            AsyncSetItem('nome', response.data.usuario.nome_pes)
+            AsyncSetItem('email', response.data.usuario.email_pes)
+            AsyncSetItem('token', response.data.usuario.token)
             
-      //       const resetAction = StackActions.reset({
-      //          index: 0,
-      //          actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
-      //       })
-      //       this.props.navigation.dispatch(resetAction)
+            const resetAction = StackActions.reset({
+               index: 0,
+               actions: [NavigationActions.navigate({ routeName: 'Drawer' })],
+            })
+            this.props.navigation.dispatch(resetAction)
 
-      //    } else {
-      //       this.setState({
-      //          backendError: 'Autenticação falhou. Tente novamente mais tarde1.'
-      //       })
-      //    }
+         } else {
+            this.setState({
+               backendError: 'Autenticação falhou. Tente novamente mais tarde1.'
+            })
+         }
 
-      // } else {
-      //    this.setState({
-      //       backendError: 'Autenticação falhou. Tente novamente mais tarde2.'
-      //    })
-      // }
+      } else {
+         this.setState({
+            backendError: 'Autenticação falhou. Tente novamente mais tarde2.'
+         })
+      }
    }
 
    _forgotPass = () => {
@@ -181,7 +180,7 @@ class Login extends Component {
 
                   <Text style={this.state.backendError != '' ? styles.backendError : {display: "none"}}>{this.state.backendError}</Text>                  
 
-                  <TextInputMask
+                  {/* <TextInputMask
                      style={[styles.input, this.state.validUsername === false ? styles.error : null]}
                      placeholder={this.state.radio === 1 ? 'CPF' : 'CNPJ'}
                      placeholderTextColor='#95989c'
@@ -190,7 +189,16 @@ class Login extends Component {
                      onChangeText={(text) => this.setState({ username: text })}
                      value={this.state.username}
                      type={this.state.radio === 1 ? 'cpf' : 'cnpj'}>
-                  </TextInputMask>
+                  </TextInputMask> */}
+                  <TextInput
+                     style={[styles.input, this.state.validUsername === false ? styles.error : null]}
+                     placeholder={this.state.radio === 1 ? 'CPF' : 'CNPJ'}
+                     placeholderTextColor='#95989c'
+                     autoCapitalize='none'
+                     keyboardType='numeric'
+                     onChangeText={(text) => this.setState({ username: text })}
+                     value={this.state.username}>
+                  </TextInput>
 
                   <Text style={this.state.validUsername === false ? {color: 'red'} : {display: "none"}}>{this.state.usernameError}</Text>
 
@@ -215,12 +223,9 @@ class Login extends Component {
 
                   <PasswordButton action={this._passwordHandler} />
 
-                  <TouchableOpacity style={styles.btnContainer} onPress={this._login}>
+                  <TouchableOpacity style={styles.btnContainer} onPress={this._validateForm}>
                      <Text style={styles.btn}>Entrar</Text>
                   </TouchableOpacity>
-                  {/* <TouchableOpacity style={styles.btnContainer} onPress={this._validateForm}>
-                     <Text style={styles.btn}>Entrar</Text>
-                  </TouchableOpacity> */}
 
                   <TouchableOpacity onPress={this._forgotPass}>
                      <Text style={styles.link}>Esqueci minha senha</Text>
