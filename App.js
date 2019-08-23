@@ -11,6 +11,13 @@ import Resgate from './src/components/pages/Resgate'
 import Detalhado from './src/components/pages/Detalhado'
 import EditarUsuario from './src/components/pages/EditarUsuario'
 
+import Indicadores from './src/components/pages/Indicadores'
+import InvestimentoDigital from './src/components/pages/InvestimentoDigital'
+import Aviso from './src/components/pages/Aviso'
+import SolicitarResg from './src/components/pages/SolicitarResg'
+import Mensagens from './src/components/pages/Mensagens'
+import Agenda from './src/components/pages/Agenda'
+
 const financeiroTabNavigator = createBottomTabNavigator(
    {
       Investimento,
@@ -21,9 +28,15 @@ const financeiroTabNavigator = createBottomTabNavigator(
 
 const drawerNavigator = createDrawerNavigator(
    {
-      Dashboard: Dashboard,
-      Configurações: Configuracoes,
-      Financeiro: financeiroTabNavigator
+      'Dashboard': Dashboard,
+      'Configurações': Configuracoes,
+      'Financeiro': financeiroTabNavigator,
+      'Indicadores': Indicadores,
+      'Investimento Digital': InvestimentoDigital,
+      'Aviso de Investimento': Aviso,
+      'Solicitar Resgate': SolicitarResg,
+      'Mensagens': Mensagens,
+      'Agenda': Agenda
    }, {
       navigationOptions: ({ navigation }) => {
          const { routeName } = navigation.state.routes[navigation.state.index]
