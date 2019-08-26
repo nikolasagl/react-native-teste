@@ -29,7 +29,7 @@ const financeiroTabNavigator = createBottomTabNavigator(
 const drawerNavigator = createDrawerNavigator(
    {
       'Dashboard': Dashboard,
-      'Configurações': Configuracoes,
+      'Configurações da Conta': Configuracoes,
       'Financeiro': financeiroTabNavigator,
       'Indicadores': Indicadores,
       'Investimento Digital': InvestimentoDigital,

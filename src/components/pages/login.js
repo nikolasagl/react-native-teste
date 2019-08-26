@@ -105,6 +105,7 @@ class Login extends Component {
          password: this.state.password,
          radio: this.state.radio
       })
+
       
       if (response.data !== null) {
          if ('error' in response.data) {
