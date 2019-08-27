@@ -3,12 +3,9 @@ import {
    Text,
    View,
    StyleSheet,
-   Alert,
-   ScrollView
+   Alert
 } from 'react-native'
-
-import AgendaCell from '../utils/agendaCell'
-
+import { Agenda as AgendaComponent } from 'react-native-calendars'
 import { AsyncGetItem, AsyncClear } from '../../helpers/mainHelper'
 
 import api from '../../services/api'
@@ -23,41 +20,54 @@ class Agenda extends Component {
       }
    }
 
-   componentDidMount() {
-      this._loadItems()
-   }
-
    render() {
       return (
-         <View style={styles.container}>
-            <ScrollView>
-               <AgendaCell date='2019-08-27' text='Atividade Teste' />
-            </ScrollView>
-         </View>
+         <AgendaComponent
+            items={this.state.items}
+            loadItemsForMonth={this.loadItems.bind(this)}
+            renderItem={this.renderItem.bind(this)}
+            renderEmptyDate={this.renderEmptyDate.bind(this)}
+            rowHasChanged={this.rowHasChanged.bind(this)}
+         />
       )
    }
 
-   _loadItems = async () => {
+   async loadItems(day) {
 
       try {
          const id = await AsyncGetItem('id')
-         const response = await api.get(`/agenda/${id}`, { headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') } })
+         const response = await api.get(`/agenda/${id}`, { 
+            headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') },
+            params: { 'day': day }
+         })
          
          var { items } = response.data
 
          this.setState({ items })
-         console.warn(this.state.items)
 
       } catch (error) {
          Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error)
       }
    }
+
+   renderItem(item) {
+      return (
+         <View style={[styles.item, { height: item.height }]}><Text>{item.name}</Text></View>
+      )
+   }
+
+   renderEmptyDate() {
+      return (
+         <View />
+      )
+   }
+
+   rowHasChanged(r1, r2) {
+      return r1.name !== r2.name;
+    }
 }
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1
-   },
    item: {
       backgroundColor: 'white',
       flex: 1,
