@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Dimensions, ScrollView, Alert, KeyboardAvoidingView, Button } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, ScrollView, Alert, KeyboardAvoidingView, Button, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
+import { Icon } from 'react-native-vector-icons/Ionicons'
 import { AsyncGetItem } from '../../helpers/mainHelper'
 import Input from '../utils/input'
 import MaskedInput from '../utils/maskedInput'
@@ -74,7 +75,12 @@ class EditarUsuario extends Component {
                            <ScrollView centerContent={true}>
                               <View style={styles.section}>
 
-                                 <Text style={styles.sectionTitle}>Dados Pessoais</Text>
+                                 <View style={styles.sectionTitle}>
+                                    <TouchableOpacity style={styles.voltar} onPress={() => this.props.navigation.goBack()}>
+                                       <Text>askdhbajohdba</Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.title}>Dados Pessoais</Text>
+                                 </View>
 
                                  <MaskedInput
                                     label='Data de Nascimento'
@@ -262,7 +268,7 @@ class EditarUsuario extends Component {
                                     label='Conta'
                                     name='conta_pes'
                                     onChange={setFieldValue}
-                                    keyboardType='numeric'                                 
+                                    keyboardType='numeric'
                                     value={values.conta_pes}
                                     autoCapitalize='none'
                                  />
@@ -376,17 +382,23 @@ const styles = StyleSheet.create({
       marginBottom: 30
    },
    sectionTitle: {
+      flexDirection: "row",
       width: width,
       height: 50,
       backgroundColor: '#ffe203',
       padding: 15,
       marginBottom: 20,
-      alignSelf: "center",
-      fontSize: 25
+      justifyContent: "space-between",
    },
    label: {
       fontSize: 18,
       fontWeight: "bold",
       alignSelf: "flex-start"
+   },
+   title: {
+      fontSize: 21
+   },
+   voltar: {
+
    }
 })

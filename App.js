@@ -26,10 +26,20 @@ const financeiroTabNavigator = createBottomTabNavigator(
    }
 )
 
+const editarUsuarioStackNavigator = createStackNavigator(
+   {
+      'Configurações da Conta': Configuracoes,
+      EditarUsuario: EditarUsuario
+   }, {
+      headerMode: 'none',
+      mode: 'modal'
+   }
+)
+
 const drawerNavigator = createDrawerNavigator(
    {
       'Dashboard': Dashboard,
-      'Configurações da Conta': Configuracoes,
+      'Configurações da Conta': editarUsuarioStackNavigator,
       'Financeiro': financeiroTabNavigator,
       'Indicadores': Indicadores,
       'Investimento Digital': InvestimentoDigital,
@@ -77,23 +87,23 @@ const stackNavigator = createStackNavigator(
             headerTintColor: '#fff',
          }),
       },
-      EditarUsuario: {
-         screen: EditarUsuario,
-         navigationOptions: ({navigation}) => ({
-            title: 'Editar Usuário',
-            headerLeft: (
-               <Icon
-                  style={{ paddingLeft: 15, color: 'white' }}
-                  name="md-arrow-back"
-                  size={30}
-                  onPress={() => navigation.goBack(null)} />
-            ),
-            headerStyle: {
-               backgroundColor: '#374a63'
-            },
-            headerTintColor: '#fff',
-         }),
-      },
+      // EditarUsuario: {
+      //    screen: EditarUsuario,
+      //    navigationOptions: ({navigation}) => ({
+      //       title: 'Editar Usuário',
+      //       headerLeft: (
+      //          <Icon
+      //             style={{ paddingLeft: 15, color: 'white' }}
+      //             name="md-arrow-back"
+      //             size={30}
+      //             onPress={() => navigation.goBack(null)} />
+      //       ),
+      //       headerStyle: {
+      //          backgroundColor: '#374a63'
+      //       },
+      //       headerTintColor: '#fff',
+      //    }),
+      // },
       Drawer: {
          screen: drawerNavigator,
          navigationOptions: () => ({
@@ -119,3 +129,4 @@ const stackNavigator = createStackNavigator(
    }
 )
 export default createAppContainer(stackNavigator)
+// export default createAppContainer(drawerNavigator)
