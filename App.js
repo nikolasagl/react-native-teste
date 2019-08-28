@@ -87,23 +87,6 @@ const stackNavigator = createStackNavigator(
             headerTintColor: '#fff',
          }),
       },
-      // EditarUsuario: {
-      //    screen: EditarUsuario,
-      //    navigationOptions: ({navigation}) => ({
-      //       title: 'Editar Usuário',
-      //       headerLeft: (
-      //          <Icon
-      //             style={{ paddingLeft: 15, color: 'white' }}
-      //             name="md-arrow-back"
-      //             size={30}
-      //             onPress={() => navigation.goBack(null)} />
-      //       ),
-      //       headerStyle: {
-      //          backgroundColor: '#374a63'
-      //       },
-      //       headerTintColor: '#fff',
-      //    }),
-      // },
       Drawer: {
          screen: drawerNavigator,
          navigationOptions: () => ({

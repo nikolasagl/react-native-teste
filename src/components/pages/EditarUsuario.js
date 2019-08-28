@@ -77,7 +77,9 @@ class EditarUsuario extends Component {
 
                                  <View style={styles.sectionTitle}>
                                     <TouchableOpacity style={styles.voltar} onPress={() => this.props.navigation.goBack()}>
-                                       <Text>askdhbajohdba</Text>
+                                       <Icon
+                                          name="md-arrow-back"
+                                          size={22} />
                                     </TouchableOpacity>
                                     <Text style={styles.title}>Dados Pessoais</Text>
                                  </View>
