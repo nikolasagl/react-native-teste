@@ -15,7 +15,7 @@ import './src/config/statusBarConfig'
 
 import Login from './src/components/pages/Login/LoginScreen'
 import RecuperarSenha from './src/components/pages/Login/RecuperarSenhaScreen'
-import Dashboard from './src/components/pages/DashboardScreen'
+import Dashboard from './src/components/pages/Dashboard/ResumoScreen'
 import Configuracoes from './src/components/pages/Configuracoes/ConfiguracaoScreen'
 import EditarUsuario from './src/components/pages/Configuracoes/EditarUsuarioScreen'
 import Investimento from './src/components/pages/Financeiro/InvestimentoScreen'
@@ -78,7 +78,7 @@ const editarUsuarioStackNavigator = createStackNavigator(
 
 const drawerNavigator = createDrawerNavigator(
    {
-      'Dashboard': Dashboard,
+      'Resumo Financeiro': Dashboard,
       'Configurações da Conta': editarUsuarioStackNavigator,
       'Financeiro': financeiroTabNavigator,
       'Indicadores': Indicadores,
@@ -89,7 +89,7 @@ const drawerNavigator = createDrawerNavigator(
       'Agenda': Agenda
    }, {
 
-      initialRouteName: 'Dashboard',
+      initialRouteName: 'Resumo Financeiro',
       drawerPosition: 'left',
       contentComponent: CustomDrawerContentComponent,
       drawerOpenRoute: 'DrawerOpen',
@@ -169,7 +169,7 @@ const stackNavigator = createStackNavigator(
             headerLeft: (
                <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
                   <Icon
-                     iconStyle={{ paddingLeft: 15, color: 'white' }}
+                     iconStyle={{ marginLeft: 15, color: 'white' }}
                      type='ionicon'
                      name="md-menu"
                      size={30} />
@@ -179,5 +179,5 @@ const stackNavigator = createStackNavigator(
       }
    }
 )
-export default createAppContainer(stackNavigator)
-// export default createAppContainer(drawerNavigator)
+// export default createAppContainer(stackNavigator)
+export default createAppContainer(drawerNavigator)

@@ -5,9 +5,11 @@ import { ScrollView } from 'react-native-gesture-handler'
 import Intl from 'intl'
 import 'intl/locale-data/jsonp/pt-BR'
 import { Icon } from 'react-native-elements'
-import { AsyncGetItem, AsyncClear } from '../../helpers/mainHelper'
+import { AsyncGetItem, AsyncClear } from '../../../helpers/mainHelper'
+import ExtratoModal from './modalExtrato'
+import ResgateModal from './modalResgate'
 
-import api from '../../services/api'
+import api from '../../../services/api'
 
 const { height, width } = Dimensions.get('window')
 
@@ -17,7 +19,9 @@ class Dashboard extends Component {
       super(props)
 
       this.state = {
-         dash: 0
+         dash: 0,
+         modalExtrato: false,
+         modalResgate: false
       }
    }
 
@@ -80,9 +84,17 @@ class Dashboard extends Component {
       return dash
    }
 
-   _extrato = () => { }
+   _extrato = () => {
+      this.setState({
+         modalExtrato: !this.state.modalExtrato
+      })
+   }
 
-   _resgate = () => { }
+   _resgate = () => {
+      this.setState({
+         modalResgate: !this.state.modalResgate
+      })
+   }
 
    render() {
       var cards = []
@@ -115,6 +127,9 @@ class Dashboard extends Component {
 
       return (
          <View style={styles.container}>
+
+            <ExtratoModal visible={this.state.modalExtrato} handler={this._extrato} />
+            <ResgateModal visible={this.state.modalResgate} handler={this._resgate} />
 
             <ScrollView style={styles.list} showsVerticalScrollIndicator={false}>
 
@@ -149,8 +164,6 @@ class Dashboard extends Component {
       )
    }
 }
-
-export default Dashboard
 
 const styles = StyleSheet.create({
    container: {
@@ -234,5 +247,7 @@ const styles = StyleSheet.create({
       elevation: 2,
       alignItems: "center",
       justifyContent: "center",
-   }
+   },
 })
+
+export default Dashboard
