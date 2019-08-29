@@ -1,9 +1,19 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native'
-import RadioButton from '../utils/radioButton'
-import HomeImage from '../utils/homeImage'
+import { 
+   View, 
+   Text, 
+   TextInput, 
+   StyleSheet, 
+   Dimensions, 
+   TouchableOpacity, 
+   TouchableWithoutFeedback, 
+   Keyboard, 
+   KeyboardAvoidingView 
+} from 'react-native'
+import RadioButton from './radioButton'
+import HomeImage from '../../utils/homeImage'
 
-import api from '../../services/api'
+import api from '../../../services/api'
 
 const { height, width } = Dimensions.get('window')
 
@@ -46,7 +56,7 @@ class RecuperarSenha extends Component {
             <KeyboardAvoidingView style={styles.container} behavior='padding'>
 
                <View style={styles.image}>
-                  <HomeImage />
+                  <HomeImage height={100} width={300} />
                </View>
 
                <View style={styles.content}>

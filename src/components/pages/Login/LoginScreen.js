@@ -14,13 +14,13 @@ import {
    KeyboardAvoidingView
 } from 'react-native'
 
-import RadioButton from '../utils/radioButton'
-import PasswordButton from '../utils/passwordButton'
-import HomeImage from '../utils/homeImage'
+import RadioButton from './radioButton'
+import PasswordButton from './passwordButton'
+import HomeImage from '../../utils/homeImage'
 
-import { validateCpf, validateCnpj, AsyncSetItem } from '../../helpers/mainHelper'
+import { validateCpf, validateCnpj, AsyncSetItem } from '../../../helpers/mainHelper'
 
-import api from '../../services/api'
+import api from '../../../services/api'
 
 const { height, width } = Dimensions.get('window')
 
@@ -172,7 +172,7 @@ class Login extends Component {
                keyboardVerticalOffset={Platform.select({ios: 0, android: 100})}>
 
                <View style={styles.image}>
-                  <HomeImage />
+                  <HomeImage height={100} width={300} />
                </View>
 
                <View style={styles.content}>

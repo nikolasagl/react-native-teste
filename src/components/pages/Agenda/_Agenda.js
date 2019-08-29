@@ -6,9 +6,9 @@ import {
    Alert
 } from 'react-native'
 import { Agenda as AgendaComponent } from 'react-native-calendars'
-import { AsyncGetItem, AsyncClear } from '../../helpers/mainHelper'
+import { AsyncGetItem, AsyncClear } from '../../../helpers/mainHelper'
 
-import api from '../../services/api'
+import api from '../../../services/api'
 
 class Agenda extends Component {
 

@@ -6,7 +6,7 @@ export default class HomeImage extends Component {
    render() {
       return (
          <Image
-            style={{ height: 100, width: 300 }}
+            style={{ height: this.props.height, width: this.props.width, tintColor: this.props.color ? this.props.color : null }}
             source={require('../../assets/fmi.png')}
          />
       )

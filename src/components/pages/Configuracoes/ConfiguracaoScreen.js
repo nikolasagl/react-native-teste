@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Alert } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import { Icon } from 'react-native-elements'
-import { AsyncGetItem, AsyncClear } from '../../helpers/mainHelper'
+import { AsyncGetItem, AsyncClear } from '../../../helpers/mainHelper'
 
-import api from '../../services/api'
+import api from '../../../services/api'
 
 const { height, width } = Dimensions.get('window')
 

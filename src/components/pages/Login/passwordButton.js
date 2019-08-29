@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Dimensions, TouchableOpacity, StyleSheet } from 'react-native'
-import { shuffleArray, utoa, negativeArray } from '../../helpers/mainHelper'
+import { shuffleArray, utoa, negativeArray } from '../../../helpers/mainHelper'
 
 const { height, width } = Dimensions.get('window')
 

@@ -6,12 +6,13 @@ import {
    Alert,
    ScrollView
 } from 'react-native'
+import { Icon } from 'react-native-elements'
 
-import AgendaCell from '../utils/agendaCell'
+import AgendaCell from './agendaCell'
 
-import { AsyncGetItem, AsyncClear } from '../../helpers/mainHelper'
+import { AsyncGetItem, AsyncClear } from '../../../helpers/mainHelper'
 
-import api from '../../services/api'
+import api from '../../../services/api'
 
 class Agenda extends Component {
 
@@ -26,6 +27,17 @@ class Agenda extends Component {
    componentDidMount() {
       this._loadItems()
    }
+
+   static navigationOptions = () => ({
+      drawerIcon: () => (
+         <Icon
+            containerStyle={{width: 50}}
+            type='material-community'
+            name='calendar-month-outline'
+            color='black'
+            size={30} />
+      )
+   })
 
    render() {
       return (

@@ -25,20 +25,31 @@ class Dashboard extends Component {
       this._loadDash()
    }
 
+   static navigationOptions = () => ({
+      drawerIcon: () => (
+         <Icon
+            containerStyle={{width: 50}}
+            type='material-community'
+            name='home-outline'
+            color='black'
+            size={30} />
+      )
+   })
+
    _loadDash = async () => {
       try {
          const id = await AsyncGetItem('id')
-         const response = await api.get(`/usuario/${id}/dashboard`, { headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') } })         
-         
+         const response = await api.get(`/usuario/${id}/dashboard`, { headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') } })
+
          var { dash } = response.data
-   
+
          dash = this._loadDashIcons(dash)
-   
+
          this.setState({ dash })
 
       } catch (error) {
          AsyncClear()
-         Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error )
+         Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error)
          const resetAction = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({ routeName: 'Login' })],
@@ -84,7 +95,7 @@ class Dashboard extends Component {
                <View style={styles.card}>
                   <View style={styles.cardHeader}>
                      <Text style={styles.realSign}>R$</Text>
-                     <Text style={styles.value}>{item.value != null ? new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 2}).format(item.value) : '0,00'}</Text>
+                     <Text style={styles.value}>{item.value != null ? new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(item.value) : '0,00'}</Text>
                   </View>
                   <View style={styles.cardBody}>
                      <Text style={styles.label}>{item.label}</Text>
@@ -106,7 +117,7 @@ class Dashboard extends Component {
          <View style={styles.container}>
 
             <ScrollView style={styles.list} showsVerticalScrollIndicator={false}>
-               
+
                {cards}
 
                <View style={styles.btnView}>

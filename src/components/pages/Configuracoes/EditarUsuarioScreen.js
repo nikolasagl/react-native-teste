@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, Dimensions, ScrollView, Alert, KeyboardAvoidingView, Button, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
-import { Icon } from 'react-native-vector-icons/Ionicons'
-import { AsyncGetItem } from '../../helpers/mainHelper'
-import Input from '../utils/input'
-import MaskedInput from '../utils/maskedInput'
+import { Icon } from 'react-native-elements'
+import { AsyncGetItem } from '../../../helpers/mainHelper'
+import Input from '../../utils/input'
+import MaskedInput from '../../utils/maskedInput'
 
-import usuarioValidation from '../validation/usuarioValidation'
+import usuarioValidation from '../../validation/usuarioValidation'
 
-import api from '../../services/api'
+import api from '../../../services/api'
 
 const { height, width } = Dimensions.get('window')
 
@@ -76,12 +76,15 @@ class EditarUsuario extends Component {
                               <View style={styles.section}>
 
                                  <View style={styles.sectionTitle}>
+                                    <View>
+                                       <Text style={styles.title}>Dados Pessoais</Text>
+                                    </View>
                                     <TouchableOpacity style={styles.voltar} onPress={() => this.props.navigation.goBack()}>
                                        <Icon
-                                          name="md-arrow-back"
-                                          size={22} />
+                                          type='ionicon'
+                                          name='md-close'
+                                          size={26} />
                                     </TouchableOpacity>
-                                    <Text style={styles.title}>Dados Pessoais</Text>
                                  </View>
 
                                  <MaskedInput
@@ -363,8 +366,7 @@ export default EditarUsuario
 
 const styles = StyleSheet.create({
    container: {
-      flex: 1,
-      backgroundColor: '#374a63',
+      flex: 1
    },
    form: {
       flexDirection: "row",
@@ -401,6 +403,6 @@ const styles = StyleSheet.create({
       fontSize: 21
    },
    voltar: {
-
+      justifyContent: "center"
    }
 })
