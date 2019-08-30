@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Header } from 'native-base'
 import CalendarPicker from 'react-native-calendar-picker'
 import HomeImage from '../../utils/homeImage'
+import moment from 'moment'
+import ExtratoTableCell from './extratoTableCell'
+import { AsyncGetItem, AsyncClear } from '../../../helpers/mainHelper'
+import api from '../../../services/api'
 
 class modalExtrato extends Component {
 
@@ -11,47 +15,76 @@ class modalExtrato extends Component {
       super()
 
       this.state = {
-         selectedInitialDate: null,
-         selectedFinalDate: null,
-         dataInicial: false,
-         dataFinal: false
+         dataInicial: moment().subtract(1, 'month'),
+         dataFinal: moment(),
+         calendarioInicial: false,
+         calendarioFinal: false,
+         extrato: []
       }
    }
 
    _onInitialDateChange = (date) => {
-
       this.setState({
-         selectedInitialDate: date,
+         dataInicial: date,
       })
    }
 
    _onFinalDateChange = (date) => {
-
       this.setState({
-         selectedFinalDate: date,
+         dataFinal: date,
       })
    }
 
-   _dataInicialHandler = () => {
+   _calendarioInicialHandler = () => {
       this.setState({
-         dataInicial: !this.state.dataInicial
+         calendarioInicial: !this.state.calendarioInicial
       })
    }
 
-   _dataFinalHandler = () => {
+   _calendarioFinalHandler = () => {
       this.setState({
-         dataFinal: !this.state.dataFinal
+         calendarioFinal: !this.state.calendarioFinal
       })
    }
 
-   _gerarExtrato = () => {}
+   componentDidMount() {
+      this._gerarExtrato()
+   }
+
+   _gerarExtrato = async () => {
+      try {
+         const id = await AsyncGetItem('id')
+         const response = await api.get(`/extrato/total/${id}`, {
+            headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') },
+            params: { 
+               dataInicial: moment(this.state.dataInicial).format('YYYY-MM-DD'),
+               dataFinal: moment(this.state.dataFinal).format('YYYY-MM-DD')
+            }
+         })
+
+         const extrato = response.data
+
+         this.setState({ extrato })
+
+      } catch (error) {
+         AsyncClear()
+         Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error)
+         const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+         })
+         this.props.navigation.dispatch(resetAction)
+      }
+   }
 
    _gerarPdf = () => {}
 
    render() {
-      const { selectedInitialDate, selectedFinalDate } = this.state;
-      const initialDate = selectedInitialDate ? selectedInitialDate.format('DD/MM/YYYY').toString() : ''
-      const finalDate = selectedFinalDate ? selectedFinalDate.format('DD/MM/YYYY').toString() : ''
+      const { dataInicial, dataFinal } = this.state;
+      const initialDate = dataInicial.format('DD/MM/YYYY').toString()
+      const finalDate = dataFinal.format('DD/MM/YYYY').toString()
+      const week = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']
+      const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
 
       return (
          <Modal visible={this.props.visible}>
@@ -59,7 +92,7 @@ class modalExtrato extends Component {
                <HomeImage height={30} width={90} />
             </Header>
 
-            <ScrollView style={styles.modal}>
+            <ScrollView style={styles.modal} scrollEnabled={false}>
 
                <View style={styles.header}>
 
@@ -80,26 +113,36 @@ class modalExtrato extends Component {
                   <View style={styles.calendarView}>
                      <Text style={styles.label}>Data Inicial</Text>
 
-                     <TouchableOpacity style={styles.calendarToggle} onPress={this._dataInicialHandler}>
+                     <TouchableOpacity style={styles.calendarToggle} onPress={this._calendarioInicialHandler}>
                         <Text style={styles.inputDate}>{initialDate}</Text>
                      </TouchableOpacity>
 
-                     <View style={this.state.dataInicial == true ? null : {display: 'none'}}>
+                     <View style={this.state.calendarioInicial == true ? null : {display: 'none'}}>
                         <CalendarPicker
-                           onDateChange={this._onInitialDateChange} />
+                           onDateChange={this._onInitialDateChange}
+                           maxDate={moment()}
+                           weekdays={week}
+                           months={months}
+                           previousTitle='Anterior'
+                           nextTitle='Proximo' />
                      </View>
                   </View>
                   
                   <View style={styles.calendarView}>
                      <Text style={styles.label}>Data Final</Text>
 
-                     <TouchableOpacity style={styles.calendarToggle} onPress={this._dataFinalHandler}>
+                     <TouchableOpacity style={styles.calendarToggle} onPress={this._calendarioFinalHandler}>
                         <Text style={styles.inputDate}>{finalDate}</Text>
                      </TouchableOpacity>
 
-                     <View style={this.state.dataFinal == true ? null : {display: 'none'}}>
+                     <View style={this.state.calendarioFinal == true ? null : {display: 'none'}}>
                         <CalendarPicker
-                           onDateChange={this._onFinalDateChange} />
+                           onDateChange={this._onFinalDateChange} 
+                           maxDate={moment()}
+                           weekdays={week}
+                           months={months}
+                           previousTitle='Anterior'
+                           nextTitle='Proximo' />
                      </View>
                   </View>
 
@@ -114,7 +157,29 @@ class modalExtrato extends Component {
                   </View>
 
                </View>
+
             </ScrollView>
+
+            <View style={{marginBottom: 15}}></View>
+               
+            <ScrollView style={[
+               this.state.calendarioFinal == false ? null : {display: 'none'}, 
+               this.state.calendarioInicial == false ? null : {display: 'none'}, 
+               styles.extratoTable
+            ]}>
+               {'extrato' in this.state.extrato ? this.state.extrato.extrato.map((element, index) => { 
+                  return (
+                     <ExtratoTableCell 
+                        key={index}
+                        data={moment(element.data).format('DD/MM/YYYY')}
+                        descricao={element.tipo} 
+                        valor={element.valor}
+                        total={element.total} />
+                  )
+               }) : null}
+
+            </ScrollView>
+
          </Modal>
       )
    }
@@ -122,7 +187,7 @@ class modalExtrato extends Component {
 
 const styles = StyleSheet.create({
    modal: {
-      flex: 1,
+      flex: 2,
    },
    header: {
       flexDirection: "row",
@@ -172,6 +237,9 @@ const styles = StyleSheet.create({
    buttonLabel: {
       color: 'white',
       fontSize: 16
+   },
+   extratoTable: {
+      flex: 3,
    }
 })
 

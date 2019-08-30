@@ -179,5 +179,5 @@ const stackNavigator = createStackNavigator(
       }
    }
 )
-// export default createAppContainer(stackNavigator)
-export default createAppContainer(drawerNavigator)
+export default createAppContainer(stackNavigator)
+// export default createAppContainer(drawerNavigator)
