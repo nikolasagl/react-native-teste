@@ -26,7 +26,7 @@ export default class ExtratoTableCell extends Component {
             <TouchableOpacity style={this.state.isExtended == true ? {display: 'none'} : null} onPress={this._handler}>
                <View style={styles.rowResume}>
                   <Text>{this.props.descricao}</Text>
-                  <Text>{new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(this.props.valor)}</Text>
+                  <Text style={this.props.valor < 0 ? {color: 'red'} : {color: 'blue'}}>{new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(this.props.valor)}</Text>
                </View>
             </TouchableOpacity>
 
@@ -44,12 +44,12 @@ export default class ExtratoTableCell extends Component {
 
                   <View style={styles.extendedValorText}>
                      <Text>Valor Operaçao</Text>
-                     <Text style={this.props.valor < 0 ? {color: 'red'} : null}>{new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(this.props.valor)}</Text>
+                     <Text style={this.props.valor < 0 ? {color: 'red'} : {color: 'blue'}}>{new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(this.props.valor)}</Text>
                   </View>
 
                   <View style={styles.extendedTotalText}>
                      <Text>Total Pós Operaçao</Text>
-                     <Text style={this.props.valor < 0 ? {color: 'red'} : null}>{new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(this.props.total)}</Text>
+                     <Text style={this.props.total < 0 ? {color: 'red'} : {color: 'green'}}>{new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(this.props.total)}</Text>
                   </View>
 
                </View>
