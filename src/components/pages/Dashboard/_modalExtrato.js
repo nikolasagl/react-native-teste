@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native'
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Header } from 'native-base'
 import CalendarPicker from 'react-native-calendar-picker'
@@ -66,8 +66,6 @@ class modalExtrato extends Component {
 
          this.setState({ extrato })
 
-         console.log(this.state.extrato.extrato)
-
       } catch (error) {
          AsyncClear()
          Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error)
@@ -80,17 +78,6 @@ class modalExtrato extends Component {
    }
 
    _gerarPdf = () => {}
-
-   _renderItem = ({item}) => {
-      console.log(item)
-      return (
-         <ExtratoTableCell 
-            data={moment(item.data).format('DD/MM/YYYY')}
-            descricao={item.tipo} 
-            valor={item.valor}
-            total={item.total} />
-      )
-   }
 
    render() {
       const { dataInicial, dataFinal } = this.state;
@@ -175,15 +162,23 @@ class modalExtrato extends Component {
 
             <View style={{marginBottom: 15}}></View>
                
-            <FlatList style={[
+            <ScrollView style={[
                this.state.calendarioFinal == false ? null : {display: 'none'}, 
                this.state.calendarioInicial == false ? null : {display: 'none'}, 
                styles.extratoTable
-            ]} 
-               data={ 'extrato' in this.state.extrato ? this.state.extrato.extrato : [] }
-               keyExtractor = {(item, index) => index}
-               renderItem={this._renderItem}
-               initialNumToRender={20} />
+            ]}>
+               {'extrato' in this.state.extrato ? this.state.extrato.extrato.map((element, index) => { 
+                  return (
+                     <ExtratoTableCell 
+                        key={index}
+                        data={moment(element.data).format('DD/MM/YYYY')}
+                        descricao={element.tipo} 
+                        valor={element.valor}
+                        total={element.total} />
+                  )
+               }) : null}
+
+            </ScrollView>
 
          </Modal>
       )
