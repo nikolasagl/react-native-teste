@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, FlatList, 
 import { Icon } from 'react-native-elements'
 import { Header } from 'native-base'
 import CalendarPicker from 'react-native-calendar-picker'
+import { StackActions, NavigationActions } from 'react-navigation'
 import HomeImage from '../../utils/homeImage'
 import moment from 'moment'
 import ExtratoTableCell from './extratoTableCell'
@@ -58,7 +59,8 @@ class modalExtrato extends Component {
             headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') },
             params: { 
                dataInicial: moment(this.state.dataInicial).format('YYYY-MM-DD'),
-               dataFinal: moment(this.state.dataFinal).format('YYYY-MM-DD')
+               dataFinal: moment(this.state.dataFinal).format('YYYY-MM-DD'),
+               pdf: false
             }
          })
 
@@ -79,7 +81,31 @@ class modalExtrato extends Component {
       }
    }
 
-   _gerarPdf = () => {}
+   _gerarPdf = async () => {
+      try {
+         console.log('entrei')
+         const id = await AsyncGetItem('id')
+         const response = await api.get(`/extrato/total/${id}/pdf`, {
+            headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') },
+            params: { 
+               dataInicial: moment(this.state.dataInicial).format('YYYY-MM-DD'),
+               dataFinal: moment(this.state.dataFinal).format('YYYY-MM-DD'),
+               pdf: true
+            }
+         })
+         console.log(typeof response.data)
+         const pdf = response.data
+
+      } catch (error) {
+         AsyncClear()
+         Alert.alert('Erro', 'Verifique sua conexão e tente novamente. ' + error)
+         const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Login' })],
+         })
+         this.props.navigation.dispatch(resetAction)
+      }
+   }
 
    _renderItem = ({item}) => {
       console.log(item)
@@ -111,7 +137,13 @@ class modalExtrato extends Component {
 
                   <Text style={styles.headerTittle}>Extrato</Text>
 
-                  <TouchableOpacity onPress={this.props.handler}>
+                  <TouchableOpacity onPress={() => {
+                     this.setState({
+                        dataInicial: moment().subtract(1, 'month'),
+                        dataFinal: moment(),
+                     })
+                     this.props.handler()
+                  }}>
                      <Icon
                         iconStyle={{marginRight: 20}}
                         type='ionicon'

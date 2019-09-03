@@ -4,6 +4,8 @@ import { Header } from 'native-base'
 import { Icon } from 'react-native-elements'
 import HomeImage from '../../utils/homeImage'
 import { TextInputMask } from 'react-native-masked-text'
+import { AsyncGetItem, AsyncClear } from '../../../helpers/mainHelper'
+import api from '../../../services/api'
 
 const { height, width } = Dimensions.get('window')
 
@@ -15,6 +17,14 @@ class modalResgate extends Component {
       this.state = {
          valor_resg: ''
       }
+   }
+
+   componentDidMount() {
+      this._loadData()
+   }
+
+   _loadData = async () => {
+
    }
 
    _solicitarResgate = () => {}
