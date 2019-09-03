@@ -137,7 +137,9 @@ class modalExtrato extends Component {
                            weekdays={week}
                            months={months}
                            previousTitle='Anterior'
-                           nextTitle='Proximo' />
+                           nextTitle='Proximo'
+                           monthBackgroundColor='#22a1d6'
+                           yearBackgroundColor='#22a1d6' />
                      </View>
                   </View>
                   
@@ -155,7 +157,9 @@ class modalExtrato extends Component {
                            weekdays={week}
                            months={months}
                            previousTitle='Anterior'
-                           nextTitle='Proximo' />
+                           nextTitle='Proximo'
+                           monthBackgroundColor='#22a1d6'
+                           yearBackgroundColor='#22a1d6' />
                      </View>
                   </View>
 
