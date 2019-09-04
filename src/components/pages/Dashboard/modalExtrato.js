@@ -12,8 +12,8 @@ import api from '../../../services/api'
 
 class modalExtrato extends Component {
 
-   constructor() {
-      super()
+   constructor(props) {
+      super(props)
 
       this.state = {
          dataInicial: moment().subtract(1, 'month'),
@@ -55,7 +55,7 @@ class modalExtrato extends Component {
    _gerarExtrato = async () => {
       try {
          const id = await AsyncGetItem('id')
-         const response = await api.get(`/extrato/total/${id}`, {
+         const response = await api.post(`/extrato/total/${id}`, {
             headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') },
             params: { 
                dataInicial: moment(this.state.dataInicial).format('YYYY-MM-DD'),
@@ -83,9 +83,8 @@ class modalExtrato extends Component {
 
    _gerarPdf = async () => {
       try {
-         console.log('entrei')
          const id = await AsyncGetItem('id')
-         const response = await api.get(`/extrato/total/${id}/pdf`, {
+         const response = await api.get(`/extrato/total/${id}`, {
             headers: { 'Authorization': 'Bearer ' + await AsyncGetItem('token') },
             params: { 
                dataInicial: moment(this.state.dataInicial).format('YYYY-MM-DD'),
@@ -93,7 +92,6 @@ class modalExtrato extends Component {
                pdf: true
             }
          })
-         console.log(typeof response.data)
          const pdf = response.data
 
       } catch (error) {
@@ -108,7 +106,6 @@ class modalExtrato extends Component {
    }
 
    _renderItem = ({item}) => {
-      console.log(item)
       return (
          <ExtratoTableCell 
             data={moment(item.data).format('DD/MM/YYYY')}
