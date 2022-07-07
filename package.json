@@ -13,7 +13,7 @@
     "formik": "^1.5.8",
     "intl": "^1.2.5",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "native-base": "^2.13.5",
     "react": "16.8.6",
     "react-native": "0.60.4",
